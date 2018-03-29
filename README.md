@@ -5,7 +5,7 @@ This application was developed to offer an easier way to integrate Arionum into 
 
 It's an alpha release and should be treated accordingly.
 
-**Implemented functions:
+**Implemented functions:**
 
 - walletpassphrase
 - getnewaddress 
@@ -18,11 +18,11 @@ It's an alpha release and should be treated accordingly.
 - getblockhash
 - getblock
 - getinfo
-- getnetworkinfo**
+- getnetworkinfo
 
 It requires an Arionum Node running on the same server.
 
-**Setup instructions:
+**Setup instructions:**
 1. Create a new mysql/mariadb db/user pair
 2. Install and configure the arionum node
 3. Edit index.php and set the db credentials and the path to the node.
