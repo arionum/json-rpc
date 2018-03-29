@@ -1,5 +1,5 @@
 # json-rpc
-Limited implementation for Bitcoin's JSON-RPC functions for Arionum ($ARO)
+Limited implementation of Bitcoin's JSON-RPC functions for Arionum ($ARO)
 
 This application was developed to offer an easier way to integrate Arionum into applications which already use bitcoin.
 
