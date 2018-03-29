@@ -6,8 +6,8 @@ This application was developed to offer an easier way to integrate Arionum into 
 It's an alpha release and should be treated accordingly.
 
 Implemented functions:
-**[x]walletpassphrase
-getnewaddress 
+**- walletpassphrase
+- getnewaddress 
 getbalance
 sendtoaddress
 validateaddress
