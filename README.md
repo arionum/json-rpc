@@ -1,34 +1,23 @@
 # json-rpc
-Limited implementation of Bitcoin's JSON-RPC functions for Arionum ($ARO)
+Limited implementation of Bitcoin's JSON-RPC functions for **Arionum ($ARO)**
 
 This application was developed to offer an easier way to integrate Arionum into applications which already use bitcoin.
 
 It's an alpha release and should be treated accordinly.
 
 Implemented functions:
-walletpassphrase
-
+**walletpassphrase
 getnewaddress 
-
 getbalance
-
 sendtoaddress
-
 validateaddress
-
 getrawtransaction  [only the json export should be used, the hex encoded version will not produce proper results due to differences in ARO]
-
 listtransactions
-
 getblockcount
-
 getblockhash
-
 getblock
-
 getinfo
-
-getnetworkinfo
+getnetworkinfo**
 
 It requires an Arionum Node running on the same server.
 
