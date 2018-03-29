@@ -5,20 +5,20 @@ This application was developed to offer an easier way to integrate Arionum into 
 
 It's an alpha release and should be treated accordingly.
 
-Implemented functions:
+**Implemented functions:
 
-**- walletpassphrase
+- walletpassphrase
 - getnewaddress 
-getbalance
-sendtoaddress
-validateaddress
-getrawtransaction  [only the json export should be used, the hex encoded version will not produce proper results due to differences in ARO]
-listtransactions
-getblockcount
-getblockhash
-getblock
-getinfo
-getnetworkinfo**
+- getbalance
+- sendtoaddress
+- validateaddress
+- getrawtransaction  [only the json export should be used, the hex encoded version will not produce proper results due to differences in ARO]
+- listtransactions
+- getblockcount
+- getblockhash
+- getblock
+- getinfo
+- getnetworkinfo**
 
 It requires an Arionum Node running on the same server.
 
