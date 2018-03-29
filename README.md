@@ -3,10 +3,10 @@ Limited implementation of Bitcoin's JSON-RPC functions for **Arionum ($ARO)**
 
 This application was developed to offer an easier way to integrate Arionum into applications which already use bitcoin.
 
-It's an alpha release and should be treated accordinly.
+It's an alpha release and should be treated accordingly.
 
 Implemented functions:
-**walletpassphrase
+**[x]walletpassphrase
 getnewaddress 
 getbalance
 sendtoaddress
@@ -21,7 +21,7 @@ getnetworkinfo**
 
 It requires an Arionum Node running on the same server.
 
-Setup instructions:
+**Setup instructions:
 1. Create a new mysql/mariadb db/user pair
 2. Install and configure the arionum node
 3. Edit index.php and set the db credentials and the path to the node.
