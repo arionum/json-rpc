@@ -7,16 +7,27 @@ It's an alpha release and should be treated accordinly.
 
 Implemented functions:
 walletpassphrase
+
 getnewaddress 
+
 getbalance
+
 sendtoaddress
+
 validateaddress
+
 getrawtransaction  [only the json export should be used, the hex encoded version will not produce proper results due to differences in ARO]
+
 listtransactions
+
 getblockcount
+
 getblockhash
+
 getblock
+
 getinfo
+
 getnetworkinfo
 
 It requires an Arionum Node running on the same server.
