@@ -1,5 +1,6 @@
 {
     "require": {
+        "vlucas/phpdotenv": "^2.4",
         "bitwasp/bitcoin-lib": "^1.2"
     }
 }
