@@ -1,20 +1,19 @@
 <?php
+
+require_once(__DIR__. '/vendor/autoload.php');
+
+use Dotenv\Dotenv;
+use BitWasp\BitcoinLib\BitcoinLib;
+use BitWasp\BitcoinLib\RawTransaction;
+
 error_reporting(0);
 ob_start();
 
-$node_path="/var/www/html/";
+$dotenv = new Dotenv(__DIR__);
+$dotenv->load();
 
+set_include_path(getenv('NODE_PATH'));
 
-//config
-
-$db_user="rpc";
-$db_pass="PASSWORD";
-$db_name="rpc";
-
-$global_key='8e7U5Qt846F00avdedB2zJ0NB';
-// config
-
-set_include_path($node_path);
 require_once("include/config.inc.php");
 require_once("include/db.inc.php");
 require_once("include/functions.inc.php");
@@ -26,7 +25,7 @@ $db=new DB($_config['db_connect'],$_config['db_user'],$_config['db_pass'],0);
 if(!$db) die("Could not connect to the Node DB backend.");
 
 
-$rpc=new DB("mysql:host=localhost;dbname=".$db_name,$db_user,$db_pass,0);
+$rpc=new DB("mysql:host=localhost;dbname=".getenv('DB_NAME'),getenv('DB_USER'),getenv('DB_PASS'),0);
 if(!$rpc) die("Could not connect to the RPC DB backend.");
 
 
@@ -87,7 +86,7 @@ while(strlen($pass)<6) $pass= readline("Please enter the password (min 6 chars, 
 		$cipher = "aes-128-cbc";
 		if (in_array($cipher, openssl_get_cipher_methods()))
 		{
-			$key=hash("sha256",$global_key.$pass);
+			$key=hash("sha256",getenv('GLOBAL_KEY').$pass);
 			echo "\nFinal Key: $key\n";
     			$ivlen = openssl_cipher_iv_length($cipher);
     			$iv = openssl_random_pseudo_bytes($ivlen);
@@ -118,7 +117,7 @@ else {
 $f=file_get_contents("/etc/aro/key");
 if(strlen($f)>6){
 $f=trim($f);
-$key=hash("sha256",$global_key.$f);
+$key=hash("sha256",getenv('GLOBAL_KEY').$f);
 $cipher = "aes-128-cbc";
 $iv=$rpc->single("SELECT val FROM wallet_config WHERE id='iv'");
 
@@ -127,12 +126,6 @@ if(str_replace("-----BEGIN PRIVATE KEY-----","",$global_priv)!=$global_priv) { $
 // temporary key, decrypt
 }
 }
-
-
-require_once(__DIR__. '/vendor/autoload.php');
-use BitWasp\BitcoinLib\BitcoinLib;
-use BitWasp\BitcoinLib\RawTransaction;
-
 
 function pay_post($url, $data=array()){
         $peer="http://127.0.0.1";
@@ -556,7 +549,7 @@ recho(RawTransaction::encode($t));
 		$f=trim($params[0]);
 		$p2=intval($params[1]);
 		$global_priv=$rpc->single("SELECT val FROM wallet_config WHERE id='private_key'");
-		$key=hash("sha256",$global_key.$f);
+		$key=hash("sha256",getenv('GLOBAL_KEY').$f);
 		$cipher = "aes-128-cbc";
 		$iv=$rpc->single("SELECT val FROM wallet_config WHERE id='iv'");
 
