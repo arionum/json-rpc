@@ -1,4 +1,7 @@
 {
+    "name": "arionum/json-rpc",
+    "description": "A limited implementation of Bitcoin's JSON-RPC functions for Arionum.",
+    "license": "MIT",
     "require": {
         "vlucas/phpdotenv": "^2.4",
         "bitwasp/bitcoin-lib": "^1.2"
