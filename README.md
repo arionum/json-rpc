@@ -25,7 +25,7 @@ It requires an Arionum Node running on the same server.
 **Setup instructions:**
 1. Create a new mysql/mariadb db/user pair
 2. Install and configure the arionum node
-3. Edit index.php and set the db credentials and the path to the node.
+3. Copy `.env.example` to a `.env` file and and set the db credentials and the path to the node.
 4. Import the contrib/db.sql to the DB
 5. Run php index.php setup to setup the wallet
 6. Create /etc/aro, set 700 permissions and chown to the http user (ex nginx)

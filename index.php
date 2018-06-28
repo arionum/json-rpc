@@ -2,14 +2,22 @@
 
 require_once __DIR__.'/vendor/autoload.php';
 
-use BitWasp\BitcoinLib\RawTransaction;
+
 use Dotenv\Dotenv;
+use Dotenv\Exception\InvalidPathException;
+use BitWasp\BitcoinLib\BitcoinLib;
+
 
 error_reporting(0);
 ob_start();
 
-$dotenv = new Dotenv(__DIR__);
-$dotenv->load();
+try {
+    $dotenv = new Dotenv(__DIR__);
+    $dotenv->load();
+} catch (InvalidPathException $invalidPathException) {
+    echo 'Please copy .env.example to .env and fill in your configuration.';
+    exit();
+}
 
 set_include_path(getenv('NODE_PATH'));
 
