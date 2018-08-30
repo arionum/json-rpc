@@ -19,6 +19,7 @@ It's an alpha release and should be treated accordingly.
 - getblock
 - getinfo
 - getnetworkinfo
+- listsinceblock
 
 It requires an Arionum Node running on the same server.
 

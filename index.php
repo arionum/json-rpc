@@ -5,7 +5,8 @@ require_once __DIR__.'/vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
-use BitWasp\BitcoinLib\BitcoinLib;
+
+// use BitWasp\BitcoinLib\BitcoinLib;
 
 
 error_reporting(0);
@@ -57,8 +58,8 @@ function recho($result = null, $error = null)
 
     $bufferContent = ob_get_contents();
     ob_end_flush();
-// just some debug
-//file_put_contents("x",$bufferContent);
+    // just some debug
+    //file_put_contents("x",$bufferContent);
 
     exit;
 }
@@ -131,7 +132,7 @@ if (str_replace("-----BEGIN PRIVATE KEY-----", "", $global_priv) != $global_priv
         if (str_replace("-----BEGIN PRIVATE KEY-----", "", $global_priv) != $global_priv) {
             $decrypted = 1;
         }
-// temporary key, decrypt
+        // temporary key, decrypt
     }
 }
 
@@ -463,6 +464,86 @@ switch ($method) {
         }
         $res = $trx;
         break;
+    case "listsinceblock":
+
+    $p1 = san($params[0]);
+    $blk = $db->row("SELECT * FROM blocks WHERE id=:id", [":id"=>$p1]);
+    
+    $p2 = intval($params[1]);
+
+    if ($p2 < 1) {
+        $p2 = 1;
+    }
+    $current = $db->row("SELECT height FROM blocks ORDER by height DESC LIMIT 1");
+    
+
+    $awhr = "";
+    $bind = [];
+    $r = $rpc->run("SELECT address, public_key, acc FROM wallets");
+    $start = $blk['height']-1;
+    $end=($current['height']-$p2)+1;
+
+    $bind=[":start"=>$start, ":end"=>$end];
+
+    $whr = "height>:start AND height<:end AND (1=2 ";
+    $adr = [];
+    foreach ($r as $x) {
+        $a = san($x['address']);
+        $p = san($x['public_key']);
+        $whr .= " OR dst='$a' OR public_key='$p' ";
+
+        $adr[$a] = $x['acc'];
+        $adr[$p] = $x['acc'];
+    }
+    $whr .= ")";
+    $r = $db->run("SELECT * FROM transactions WHERE $whr ORDER by height,date DESC LIMIT $p3,$p2", $bind);
+
+    $trx = [];
+    foreach ($r as $x) {
+        $dst = $x['dst'];
+        $pub = $x['public_key'];
+
+        $cat = "send";
+        $acc = $adr[$pub];
+        $fee = 0;
+        if (isset($adr[$dst]) && isset($adr[$pub])) {
+            continue;
+        }
+        if (isset($adr[$dst])) {
+            $cat = "receive";
+            $acc = $adr[$dst];
+        } else {
+            $x['val'] *= -1;
+            $fee = number_format($x['fee'] * -1, 8, ".", "");
+        }
+
+        $t = [
+            "account"  => $acc,
+            "address"  => $dst,
+            "category" => $cat,
+            "amount"   => number_format($x['val'], 8, ".", ""),
+            "vout"     => 0,
+        ];
+
+        if ($fee != 0) {
+            $t['fee'] = $fee;
+        }
+        $t['confirmations'] = $current['height'] - $x['height'];
+        $t['blockhash'] = $x['block'];
+        $t['blockindex'] = 0;
+        $t['blocktime'] = $x['date'];
+        $t['txid'] = $x['id'];
+        $t['walletconflicts'] = [];
+        $t['time'] = $x['date'];
+        $t['timereceived'] = $x['date'];
+        $t['bip125-replaceable'] = "no";
+        $t['abandoned'] = false;
+
+        $trx[] = $t;
+    }
+    $lasthash=$db->single("SELECT id FROM blocks WHERE height=:h", [":h"=>$end-1]);
+    $res = ["transactions"=>$trx, "lastblock"=>$lasthash];
+        break;
     case "getrawtransaction":
         $p1 = san($params[0]);
         $x = $db->row("SELECT * FROM transactions WHERE id=:id and version=1", [":id" => $p1]);
@@ -512,11 +593,11 @@ switch ($method) {
             'locktime' => '0',
         ];
 
-        $p2 = trim($params[1]);
-        if ($p2 == true) {
+        // $p2 = trim($params[1]);
+        // if ($p2 == true) {
             recho($t);
-        }
-        recho(RawTransaction::encode($t));
+        // }
+        // recho(RawTransaction::encode($t));
         break;
 
     case "sendtoaddress":
