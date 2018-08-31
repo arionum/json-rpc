@@ -496,7 +496,7 @@ switch ($method) {
         $adr[$p] = $x['acc'];
     }
     $whr .= ")";
-    $r = $db->run("SELECT * FROM transactions WHERE $whr ORDER by height,date DESC LIMIT $p3,$p2", $bind);
+    $r = $db->run("SELECT * FROM transactions WHERE $whr ORDER by height,date DESC", $bind);
 
     $trx = [];
     foreach ($r as $x) {
@@ -541,7 +541,7 @@ switch ($method) {
 
         $trx[] = $t;
     }
-    $lasthash=$db->single("SELECT id FROM blocks WHERE height=:h", [":h"=>$end-1]);
+    $lasthash=$db->single("SELECT id FROM blocks WHERE height=:h", [":h"=>$end]);
     $res = ["transactions"=>$trx, "lastblock"=>$lasthash];
         break;
     case "getrawtransaction":
