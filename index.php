@@ -406,18 +406,28 @@ switch ($method) {
         }
         $r = $rpc->run("SELECT address, public_key, acc FROM wallets $awhr", $bind);
         $max = $current['height'] - 5000;
-        $whr = "height>$max AND (1=2 ";
+        $bind=[":pp3"=>$p3, ":pp2"=>$p2, ":max"=>$max];
+
+        $whr = "height>:max AND (1=2 ";
         $adr = [];
+        $i=0;
         foreach ($r as $x) {
+            $i++;
+            $ck=str_pad($i,10,"0",STR_PAD_LEFT);
+
             $a = san($x['address']);
             $p = san($x['public_key']);
-            $whr .= " OR dst='$a' OR public_key='$p' ";
-
+           
+            $bind["a".$ck]=$a;
+            $bind["p".$ck]=$p;
+            $whr .= " OR dst=:a{$ck} OR public_key=:p{$ck} ";
             $adr[$a] = $x['acc'];
             $adr[$p] = $x['acc'];
         }
         $whr .= ")";
-        $r = $db->run("SELECT * FROM transactions WHERE $whr ORDER by height,date DESC LIMIT $p3,$p2");
+      
+
+        $r = $db->run("SELECT * FROM transactions WHERE $whr ORDER by height, date DESC LIMIT :pp3,:pp2",$bind);
 
         $trx = [];
         foreach ($r as $x) {
@@ -487,11 +497,17 @@ switch ($method) {
 
     $whr = "height>:start AND height<:end AND (1=2 ";
     $adr = [];
+    $i=0;
     foreach ($r as $x) {
+        $i++;
+        $ck=str_pad($i,10,"0",STR_PAD_LEFT);
+
         $a = san($x['address']);
         $p = san($x['public_key']);
-        $whr .= " OR dst='$a' OR public_key='$p' ";
-
+       
+        $bind["a".$ck]=$a;
+        $bind["p".$ck]=$p;
+        $whr .= " OR dst=:a{$ck} OR public_key=:p{$ck} ";
         $adr[$a] = $x['acc'];
         $adr[$p] = $x['acc'];
     }
